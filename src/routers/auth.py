@@ -6,7 +6,7 @@ from src.database import SessionLocal
 from src.models import Users
 from passlib.context import CryptContext
 from typing import Annotated
-from fastapi.security import OAuth2PasswordRequestForm, OAuth2AuthorizationCodeBearer
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from datetime import timedelta, datetime, timezone
 
@@ -20,7 +20,7 @@ ALGORITHM = 'HS256'
 
 bcrypt_context = CryptContext(schemes = ['bcrypt'], deprecated = 'auto')
 
-oauth2_bearer = OAuth2AuthorizationCodeBearer(token_utl = 'auth/token')
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl = 'auth/token')
 
 class CreateUserRequest(BaseModel):
     username : str
@@ -65,9 +65,9 @@ def create_access_token(username : str, user_id: int, role : str, expires_delta:
 async def get_current_user(token : Annotated[str, Depends(oauth2_bearer)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.sub
-        user_id = payload.id
-        user_role = payload.role
+        username = payload.get('sub')
+        user_id = payload.get('id')
+        user_role = payload.get('role')
         if username is None or user_id is None:
             raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED,
                                 detail = "Could not validate user")

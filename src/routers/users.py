@@ -5,11 +5,11 @@ from starlette import status
 from src.database import SessionLocal
 from typing import Annotated
 from sqlalchemy.orm import Session
-from auth import get_current_user
+from .auth import get_current_user
 from src.models import Users
 
 router = APIRouter(
-    prefix = ['/users'],
+    prefix = '/users',
     tags = ['users']
 )
 
@@ -39,10 +39,10 @@ class UpdateUser(BaseModel):
     phone_number : str
     first_name : str
     last_name : str
+    membership : str
 
 
 ###Endpoints###
-
 
 
 @router.get("/", status_code= status.HTTP_200_OK)
@@ -64,7 +64,7 @@ async def change_password(db : db_dependency,
                             detail = "Authentication Failed")
     
     user_model = db.query(Users).filter(Users.id == user.get('id')).first()
-    if  not bcrypt_context.verify(user_verification.password == user_model.hashed_password) :
+    if  not bcrypt_context.verify(user_verification.password, user_model.hashed_password) :
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Error on password Change")
     
@@ -84,7 +84,7 @@ async def update_details(db : db_dependency,
     user_model = db.query(Users).filter(Users.id == user.get('id')).first()
 
     user_model.username = update_user.username
-    user_model.email = update_user.emailemail
+    user_model.email = update_user.email
     user_model.first_name = update_user.first_name
     user_model.last_name = update_user.last_name
     user_model.phone_number = update_user.phone_number

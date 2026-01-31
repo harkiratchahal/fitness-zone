@@ -1,4 +1,4 @@
-from database import Base
+from src.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
 class Users(Base):
@@ -13,15 +13,19 @@ class Users(Base):
     is_active = Column(Boolean, default = True)
     role = Column(String, default='user')
     phone_number = Column(String)
+    membership = Column(String, default = "Monthly")
+    start_date = Column(String)
+    last_date = Column(String)
 
-class Membership(Base):
-    __tablename__ = "membership"
+
+class Complaints(Base):
+    __tablename__ = "complaints"
 
     id = Column(Integer, primary_key = True)
-    name = Column(String)
-    start_date = Column(String)
-    end_date = Column(String)
-    fee = Column(String)
-    is_active = Column(Boolean, default = True)
+    title = Column(String)
+    description = Column(String)
+    is_resolved = Column(Boolean, default = False)
+    admin_note = Column(String, default = "")
     owner_id = Column(Integer, ForeignKey('users.id'))
+
 
