@@ -1,0 +1,17 @@
+# Environments
+venv/
+env/
+.env
+
+# Cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDEs
+.idea/
+.vscode/
+
+# Ignore local copy of database if using sqlite
+*.sqlite3
+*.db

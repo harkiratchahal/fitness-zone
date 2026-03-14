@@ -26,9 +26,9 @@ class ComplaintResolution(BaseModel):
 
 class Membership(BaseModel):
     user_id : int = Field(gt = 0)
-    membership_type : int
-    start_date : int
-    last_date : int
+    membership_type : str
+    start_date : str
+    last_date : str
 
 
 db_dependency = Annotated[Session, Depends(get_db)]
@@ -36,14 +36,14 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 @router.get("/complaints", status_code = status.HTTP_200_OK)
 async def read_all_complaints(user : user_dependency, db : db_dependency):
-    if user is None or user.get("role") != "admin":
+    if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     return db.query(Complaints).all()
 
 @router.get("/user", status_code = status.HTTP_200_OK)
 async def read_all_users(user : user_dependency, db : db_dependency):
-    if user is None or user.get("role") != "admin":
+    if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     return db.query(Users).all()
@@ -52,7 +52,7 @@ async def read_all_users(user : user_dependency, db : db_dependency):
 async def delete_complaints(user :  user_dependency,
                             db : db_dependency, 
                             complaint_id  : int = Path(gt = 0)):
-    if user is None or user.get("role") != "admin":
+    if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     complaint_model = db.query(Complaints).filter(Complaints.id == complaint_id).first()
@@ -67,7 +67,7 @@ async def resolve_complaint(user : user_dependency,
                       db : db_dependency,
                       complaint_resolution : ComplaintResolution
                       ):
-    if user is None or user.get("role") != "admin":
+    if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     complaint_model = db.query(Complaints).filter(Complaints.id == complaint_resolution.id).first()
@@ -86,7 +86,7 @@ async def resolve_complaint(user : user_dependency,
 async def delete_user(user :  user_dependency,
                       db : db_dependency, 
                       user_id  : int = Path(gt = 0)):
-    if user is None or user.get("role") != "admin":
+    if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     user_model = db.query(Users).filter(Users.id == user_id).first()
@@ -101,7 +101,7 @@ async def add_membership(user : user_dependency,
                          db : db_dependency,
                          membership : Membership
                          ):
-    if user is None or user.get("role") != "admin":
+    if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     user_model = db.query(Users).filter(Users.id == membership.user_id).first()
