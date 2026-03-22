@@ -3,9 +3,10 @@ from pydantic import BaseModel, Field
 from starlette import status
 from src.models import Complaints
 from src.database import SessionLocal
-from typing import Annotated
+from typing import Annotated, List
 from sqlalchemy.orm import Session
 from .auth import get_current_user
+from src.schemas import ComplaintResponse
 
 
 router = APIRouter(
@@ -29,7 +30,7 @@ class ComplaintRequest(BaseModel):
 
 
 
-@router.get("/", status_code = status.HTTP_200_OK)
+@router.get("/", status_code = status.HTTP_200_OK, response_model=List[ComplaintResponse])
 async def read_all(user : user_dependency, db : db_dependency):
     if user is None:
         raise HTTPException(status_code = 401, detail = "Authentication Failed")
@@ -37,11 +38,12 @@ async def read_all(user : user_dependency, db : db_dependency):
 
 
 
-@router.get("/complaint/{complaint_id}", status_code = status.HTTP_200_OK)
+@router.get("/complaint/{complaint_id}", status_code = status.HTTP_200_OK, response_model=ComplaintResponse)
 async def read_complaint(user : user_dependency, db : db_dependency, complaint_id : int = Path(gt = 0)):
     if user is None:
         raise HTTPException(status_code = 401, detail = "Authentication Failed")
-    complaint_model = db.query(Complaints).filter(Complaints.id == complaint_id).first()
+    complaint_model = db.query(Complaints).filter(Complaints.id == complaint_id)\
+        .filter(Complaints.owner_id == user.get('id')).first()
     if complaint_model is not None:
         return complaint_model
     raise HTTPException(status_code = 404, detail = "Complaint Not Found")

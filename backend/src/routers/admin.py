@@ -1,11 +1,12 @@
 from fastapi import Depends, HTTPException, Path, APIRouter
 from starlette import status
-from src.models import Users, Complaints
+from src.models import Users, Complaints, Attendance
 from src.database import SessionLocal
-from typing import Annotated
+from typing import Annotated, List
 from sqlalchemy.orm import Session
 from .auth import get_current_user
 from pydantic import BaseModel, Field
+from src.schemas import ComplaintResponse, UserResponse
 
 
 router = APIRouter(
@@ -34,14 +35,14 @@ class Membership(BaseModel):
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
-@router.get("/complaints", status_code = status.HTTP_200_OK)
+@router.get("/complaints", status_code = status.HTTP_200_OK, response_model=List[ComplaintResponse])
 async def read_all_complaints(user : user_dependency, db : db_dependency):
     if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = "Authentication Failed")
     return db.query(Complaints).all()
 
-@router.get("/user", status_code = status.HTTP_200_OK)
+@router.get("/user", status_code = status.HTTP_200_OK, response_model=List[UserResponse])
 async def read_all_users(user : user_dependency, db : db_dependency):
     if user is None or user.get("user_role") != "admin":
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
@@ -92,6 +93,9 @@ async def delete_user(user :  user_dependency,
     user_model = db.query(Users).filter(Users.id == user_id).first()
     if user_model is None:
         raise HTTPException(status_code = 404, detail = "User Not Found")
+        
+    db.query(Complaints).filter(Complaints.owner_id == user_id).delete()
+    db.query(Attendance).filter(Attendance.user_id == user_id).delete()
     db.query(Users).filter(Users.id == user_id).delete()
     db.commit()
 

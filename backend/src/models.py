@@ -29,3 +29,12 @@ class Complaints(Base):
     owner_id = Column(Integer, ForeignKey('users.id'))
 
 
+class Attendance(Base):
+    __tablename__ = "attendance"
+
+    id = Column(Integer, primary_key = True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
+    date = Column(String)
+    status = Column(String, default='Present')
+
+

@@ -45,7 +45,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 
 def authenticate_user(username : str, password : str, db):
-    user = db.query(Users).filter(Users.username == username).first()
+    user = db.query(Users).filter((Users.username == username) | (Users.email == username)).first()
     if not user:
         return False
     if not bcrypt_context.verify(password, user.hashed_password):
@@ -91,7 +91,7 @@ async def create_user(user_request : CreateUserRequest,
 
     create_user_model = Users(
         email = user_request.email,
-        username = user_request.username,
+        username = user_request.username.strip(),
         first_name = user_request.first_name,
         last_name = user_request.last_name,
         phone_number = user_request.phone_number,
@@ -112,4 +112,5 @@ async def login_for_access_token(form_data : Annotated[OAuth2PasswordRequestForm
                             detail = 'Could not validate user')
     token = create_access_token(user.username, user.id, user.role, timedelta(minutes = 30))
     return {'access_token' : token, 'token_type' : 'bearer'}
+
     
