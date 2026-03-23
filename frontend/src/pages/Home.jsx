@@ -1,16 +1,105 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, Users, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Activity, Users, ShieldCheck, Instagram, Play } from 'lucide-react';
+
+import img1 from '../assets/ig-reels/DWKzwDzD9is.jpg';
+import vid1 from '../assets/ig-reels/DWKzwDzD9is.mp4';
+
+import img2 from '../assets/ig-reels/DTRSiSlkrYI.jpg';
+import vid2 from '../assets/ig-reels/DTRSiSlkrYI.mp4';
+
+import img3 from '../assets/ig-reels/DVNekFej4Yp.jpg';
+import vid3 from '../assets/ig-reels/DVNekFej4Yp.mp4';
+
+import img4 from '../assets/ig-reels/DTHCv9PgTRs.jpg';
+import vid4 from '../assets/ig-reels/DTHCv9PgTRs.mp4';
+
+const ReelCard = ({ url, videoSrc, thumbnail }) => {
+    const videoRef = useRef(null);
+
+    const handleMouseEnter = () => {
+        if (videoRef.current) {
+            videoRef.current.volume = 0.5; // Moderate volume
+            videoRef.current.play().catch(err => console.log("Autoplay blocked or error:", err));
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (videoRef.current) {
+            videoRef.current.pause();
+        }
+    };
+
+    return (
+        <div 
+            className="relative bg-black rounded-xl border border-gray-800 overflow-hidden text-center w-full max-w-[280px] mx-auto aspect-[9/16] cursor-pointer group hover:border-primary transition-all duration-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={() => window.open(url, '_blank')}
+        >
+            <video 
+                ref={videoRef}
+                src={videoSrc}
+                poster={thumbnail}
+                loop 
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            
+            {/* Simple subtle Instagram Icon to indicate it's a reel */}
+            <div className="absolute top-4 right-4 bg-black/50 p-2 rounded-full backdrop-blur-sm opacity-80 group-hover:opacity-100 transition-opacity">
+                <Instagram className="text-white h-5 w-5" />
+            </div>
+
+            {/* Play Button Indicator (hides on hover) */}
+            <div className="absolute inset-0 z-10 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                <div className="h-16 w-16 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+                    <Play className="text-white h-8 w-8 ml-1" fill="currentColor" />
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const Home = () => {
-    // Dummy reels structure
+    const reels = [
+        { 
+            url: "https://www.instagram.com/reel/DWKzwDzD9is/", 
+            video: vid1,
+            thumbnail: img1
+        },
+        { 
+            url: "https://www.instagram.com/reel/DTRSiSlkrYI/", 
+            video: vid2,
+            thumbnail: img2
+        },
+        { 
+            url: "https://www.instagram.com/reel/DVNekFej4Yp/", 
+            video: vid3,
+            thumbnail: img3
+        },
+        { 
+            url: "https://www.instagram.com/reel/DT33qXBj1mk/", 
+            video: vid1, // Fallback due to Instagram block
+            thumbnail: img1 // Fallback
+        },
+        { 
+            url: "https://www.instagram.com/p/DTH-afFD-2r/", 
+            video: vid2, // Fallback due to Instagram block
+            thumbnail: img2 // Fallback
+        },
+        { 
+            url: "https://www.instagram.com/reel/DTHCv9PgTRs/", 
+            video: vid4,
+            thumbnail: img4
+        }
+    ]; // Reels array end
 
     return (
         <div className="w-full">
             {/* Hero Section */}
             <div className="relative bg-black border-b border-gray-800">
                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10"></div>
-                 {/* Provide a real gym image for the background, hosted on unsplash */}
                  <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" 
                       alt="Gym Background" className="w-full h-[600px] object-cover opacity-50" />
                  
@@ -76,14 +165,9 @@ const Home = () => {
                          </div>
                      </div>
                      
-                     <div className="grid md:grid-cols-3 gap-8">
-                          {/* Placeholder embedding for Instagram style frames */}
-                          {[1,2,3].map((item) => (
-                             <div key={item} className="bg-background rounded-xl border border-gray-800 overflow-hidden text-center aspect-[9/16] flex flex-col items-center justify-center p-4">
-                                <Activity className="text-gray-700 h-16 w-16 mb-4" />
-                                <p className="text-gray-500 font-bebas text-xl">Instagram Reel Placeholder</p>
-                                <p className="text-gray-600 text-sm mt-2">Replace with iframe/embed script</p>
-                             </div>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                          {reels.map((reel, index) => (
+                             <ReelCard key={index} url={reel.url} videoSrc={reel.video} index={index} />
                           ))}
                      </div>
                   </div>
