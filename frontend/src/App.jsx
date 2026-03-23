@@ -23,11 +23,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/memberships" element={<Memberships />} />
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/memberships" element={<ProtectedRoute><Memberships /></ProtectedRoute>} />
             <Route path="/complaints" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
             
             {/* Admin Routes */}

@@ -122,7 +122,7 @@ const Layout = ({ children }) => {
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
                 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                         {/* Brand Column */}
                         <div className="space-y-6">
                             <div className="flex items-center space-x-4">
@@ -135,11 +135,11 @@ const Layout = ({ children }) => {
                                 Forged in iron, built through sweat. Join the most elite training facility and transform your body into a weapon. We don't just build muscle; we forge character.
                             </p>
                             <div className="flex space-x-4">
-                                <a href="https://instagram.com/balfitnesszone" target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-secondary border border-gray-800 text-gray-400 hover:text-pink-500 hover:border-pink-500 hover:bg-pink-500/10 transition-all duration-300" title="Instagram">
+                                <a href="https://www.instagram.com/balfitnesszone/" target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-secondary border border-gray-800 text-gray-400 hover:text-pink-500 hover:border-pink-500 hover:bg-pink-500/10 transition-all duration-300" title="Instagram">
                                     <Instagram size={18} />
                                 </a>
                                 <a href="https://wa.me/919914163531" target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-secondary border border-gray-800 text-gray-400 hover:text-green-500 hover:border-green-500 hover:bg-green-500/10 transition-all duration-300" title="WhatsApp">
-                                    <MessageCircle size={18} />
+                                    <MessageSquare size={18} />
                                 </a>
                                 <a href="mailto:armaanbal48@gmail.com" className="h-10 w-10 flex items-center justify-center rounded-full bg-secondary border border-gray-800 text-gray-400 hover:text-blue-500 hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-300" title="Email">
                                     <Mail size={18} />
@@ -151,11 +151,16 @@ const Layout = ({ children }) => {
                         <div>
                             <h3 className="font-bebas text-xl text-white tracking-wider mb-6">Quick Links</h3>
                             <ul className="space-y-3">
-                                {['Home', 'About Us', 'Classes', 'Our Trainers', 'Membership Plans', 'Contact'].map((item) => (
-                                    <li key={item}>
-                                        <Link to={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`} className="text-gray-400 hover:text-primary transition-colors flex items-center group">
+                                {[
+                                    { name: 'Home', path: '/' },
+                                    { name: 'Membership Plans', path: '/memberships' },
+                                    { name: 'Dashboard', path: '/dashboard' },
+                                    { name: 'Login / Register', path: '/login' }
+                                ].map((item) => (
+                                    <li key={item.name}>
+                                        <Link to={item.path} className="text-gray-400 hover:text-primary transition-colors flex items-center group">
                                             <span className="w-0 h-px bg-primary mr-0 group-hover:w-3 group-hover:mr-2 transition-all duration-300"></span>
-                                            <span className="text-sm">{item}</span>
+                                            <span className="text-sm">{item.name}</span>
                                         </Link>
                                     </li>
                                 ))}
@@ -181,25 +186,7 @@ const Layout = ({ children }) => {
                             </ul>
                         </div>
 
-                        {/* Newsletter */}
-                        <div>
-                            <h3 className="font-bebas text-xl text-white tracking-wider mb-6">Newsletter</h3>
-                            <p className="text-gray-400 text-sm mb-4">Subscribe to get the latest updates, workout tips, and special offers directly to your inbox.</p>
-                            <form className="space-y-2 mt-2" onSubmit={(e) => e.preventDefault()}>
-                                <input 
-                                    type="email" 
-                                    placeholder="Your email address" 
-                                    className="w-full bg-secondary border border-gray-800 text-white px-4 py-2.5 rounded focus:outline-none focus:border-primary transition-colors text-sm"
-                                    required
-                                />
-                                <button 
-                                    type="submit" 
-                                    className="w-full bg-primary hover:bg-red-600 text-white font-bold py-2.5 rounded transition-colors text-sm tracking-widest uppercase"
-                                >
-                                    Subscribe Now
-                                </button>
-                            </form>
-                        </div>
+
                     </div>
 
                     {/* Bottom Bar */}

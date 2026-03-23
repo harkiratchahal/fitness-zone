@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from .auth import get_current_user
 from src.models import Users
 from src.schemas import UserResponse
-from typing import List
 
 router = APIRouter(
     prefix = '/users',

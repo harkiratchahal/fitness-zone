@@ -109,7 +109,7 @@ const Dashboard = () => {
 
              {/* Quick Actions */}
              <h2 className="text-2xl font-bebas tracking-wide text-white mb-4">Quick Actions</h2>
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                  <Link to="/profile" className="bg-secondary hover:bg-gray-800 p-4 rounded border border-gray-800 flex justify-between items-center transition-colors">
                      <span className="font-medium text-gray-300">Edit Profile</span>
                      <ChevronRight size={18} className="text-gray-500" />
@@ -120,10 +120,6 @@ const Dashboard = () => {
                  </Link>
                  <Link to="/complaints" className="bg-secondary hover:bg-gray-800 p-4 rounded border border-gray-800 flex justify-between items-center transition-colors">
                      <span className="font-medium text-gray-300">Support / Complaints</span>
-                     <ChevronRight size={18} className="text-gray-500" />
-                 </Link>
-                 <Link to="/" className="bg-secondary hover:bg-gray-800 p-4 rounded border border-gray-800 flex justify-between items-center transition-colors">
-                     <span className="font-medium text-gray-300">Class Schedule</span>
                      <ChevronRight size={18} className="text-gray-500" />
                  </Link>
              </div>

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
@@ -7,7 +7,7 @@ from src.models import Users
 from passlib.context import CryptContext
 from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from jose import jwt, JWTError
+from jose import jwt
 from datetime import timedelta, datetime, timezone
 
 router = APIRouter(
@@ -72,7 +72,7 @@ async def get_current_user(token : Annotated[str, Depends(oauth2_bearer)]):
             raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED,
                                 detail = "Could not validate user")
         return {'username': username, 'id' : user_id, 'user_role' : user_role}
-    except:
+    except Exception:
         raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED,
                                 detail = "Could not validate user")
 

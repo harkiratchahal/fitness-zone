@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Activity, Users, ShieldCheck, Instagram, Play } from 'lucide-react';
 
@@ -155,13 +155,41 @@ const Home = () => {
                  </div>
              </div>
 
+             {/* Our Trainer Section */}
+             <div className="py-24 bg-background border-t border-gray-800" id="our-trainers">
+                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                     <div className="text-center mb-16">
+                         <h2 className="text-4xl font-bebas text-white tracking-wider">Meet Our Elite Trainer</h2>
+                         <div className="h-1 w-20 bg-primary mx-auto mt-4 rounded"></div>
+                     </div>
+                     
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
+                         {[2, 3, 4].map((num) => (
+                             <div key={num} className="group relative rounded-xl overflow-hidden border border-gray-800 hover:border-primary transition-all duration-300">
+                                 <div className="aspect-[3/4] w-full bg-gray-900">
+                                     <img 
+                                         src={`/photos/trainer-${num}.jpeg`} 
+                                         alt={`Trainer photo ${num}`}
+                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                     />
+                                 </div>
+                                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                                     <h3 className="text-xl font-bebas text-white tracking-wide">Elite Trainer</h3>
+                                     <p className="text-primary text-sm font-medium mt-1 uppercase tracking-widest">Strength & Conditioning</p>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                 </div>
+             </div>
+
              {/* Instagram Reels Section */}
              <div className="py-24 bg-secondary border-y border-gray-800">
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                      <div className="flex justify-between items-end mb-12">
                          <div>
                              <h2 className="text-4xl font-bebas text-white tracking-wider">The Zone In Action</h2>
-                             <p className="text-gray-400 mt-2">Follow us on Instagram @balfitnesszone</p>
+                             <p className="text-gray-400 mt-2">Follow us on Instagram <a href="https://www.instagram.com/balfitnesszone/" target="_blank" rel="noreferrer" className="text-primary hover:underline">@balfitnesszone</a></p>
                          </div>
                      </div>
                      
