@@ -10,9 +10,10 @@ load_dotenv()
 SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
 
 if not SQLALCHEMY_DATABASE_URL:
-    raise ValueError("SQLALCHEMY_DATABASE_URL is not set in the environment variables.")
+    print("WARNING: SQLALCHEMY_DATABASE_URL not set. Falling back to local SQLite.")
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./fitness_zone.db"
 
-if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     engine = create_engine(
         SQLALCHEMY_DATABASE_URL,
         connect_args={"check_same_thread": False}
